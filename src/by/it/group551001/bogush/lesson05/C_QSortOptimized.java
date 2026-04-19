@@ -63,7 +63,18 @@ public class C_QSortOptimized {
         }
         //тут реализуйте логику задачи с применением быстрой сортировки
         //в классе отрезка Segment реализуйте нужный для этой задачи компаратор
+        QuickSort(segments,0,segments.length - 1);
 
+        for (int i = 0; i < points.length; i++) {
+            int count = 0;
+            int c = lower_bound(segments,points[i]);
+            for (int z = 0; z <= c; z++) {
+                if (segments[z].start <= points[i] && segments[z].stop >= points[i]) {
+                    count++;
+                }
+            }
+            result[i] = count;
+        }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
@@ -84,6 +95,59 @@ public class C_QSortOptimized {
             //подумайте, что должен возвращать компаратор отрезков
             return 0;
         }
+    }
+
+    void QuickSort (Segment[] segments,int left,int right) {
+       while (left < right) {
+           int mid = (left + right) / 2;
+           Segment pivot = segments[mid];
+
+           int i = left;
+           int j = right;
+           int z = left;
+
+           while (j - z >= 1) {
+               if (segments[z].start < pivot.start) {
+                   Segment temp = segments[z];
+                   segments[z] = segments[i];
+                   segments[i] = temp;
+                   i++;
+                   z++;
+               } else if (segments[z].start == pivot.start) {
+                   z++;
+               } else {
+                   Segment temp = segments[z];
+                   segments[z] = segments[j];
+                   segments[j] = temp;
+                   j--;
+               }
+           }
+
+           if (i - left < right - j) {
+               QuickSort(segments,left,i);
+               left = j;
+           } else {
+               QuickSort(segments,j,right);
+               right = i;
+           }
+       }
+    }
+
+    int lower_bound (Segment[] segments,int point) {
+        int left = 0;
+        int right = segments.length;
+        int mid = (left + right) / 2;
+
+        while (left < right) {
+            if (segments[mid].start > point) {
+                right = mid;
+                mid = (left + right) / 2;
+            } else {
+                left = mid + 1;
+                mid = (left + right) / 2;
+            }
+        }
+        return left - 1;
     }
 
 }
