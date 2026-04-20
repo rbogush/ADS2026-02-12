@@ -45,8 +45,28 @@ public class A_Knapsack {
             gold[i]=scanner.nextInt();
         }
 
+        int rows = n + 1;
+        int cols = w + 1;
 
-        int result = 0;
+        int[][] matrix = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++)
+                matrix[i][j] = 0;
+        }
+
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (gold[i - 1] > j) {
+                    matrix[i][j] = matrix[i - 1][j];
+                } else {
+                    matrix[i][j] = Math.max(matrix[i - 1][j],matrix[i][j - gold[i - 1]] + gold[i - 1]);
+                }
+            }
+        }
+
+
+        int result = matrix[rows - 1][cols - 1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
