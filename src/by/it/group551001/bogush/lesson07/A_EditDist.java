@@ -41,11 +41,19 @@ public class A_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        int result = 0;
+        int result = lev(one,two);
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
+    }
+
+    int lev (String a,String b) {
+        if (a.length() == 0)
+            return b.length();
+        if (b.length() == 0)
+            return a.length();
+        if (a.charAt(0) == b.charAt(0))
+            return lev (a.substring(1),b.substring(1));
+        return 1 + Math.min( lev(a,b.substring(1)),Math.min(lev (a.substring(1),b), lev(a.substring(1), b.substring(1))));
     }
 
 

@@ -41,9 +41,28 @@ public class B_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int rows = two.length() + 1;
+        int cols = one.length() + 1;
+        int[][] lev_matrix = new int[rows][cols];
+        lev_matrix[0][0] = 0;
+        for (int i = 1; i < cols; i++)
+            lev_matrix[0][i] = lev_matrix[0][i - 1] + 1;
+        for (int j = 1; j < rows; j++)
+            lev_matrix[j][0] = lev_matrix[j - 1][0] + 1;
+        String new_one = "#" + one;
+        String new_two = "#" + two;
 
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (new_one.charAt(j) == new_two.charAt(i))
+                    lev_matrix[i][j] = lev_matrix[i - 1][j - 1];
+                else {
+                    lev_matrix[i][j] = 1 + Math.min(lev_matrix[i][j - 1],Math.min(lev_matrix[i - 1][j - 1],lev_matrix[i - 1][j]));
+                }
+            }
+        }
 
-        int result = 0;
+        int result = lev_matrix[rows - 1][cols - 1];
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }

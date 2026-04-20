@@ -50,9 +50,71 @@ public class C_EditDist {
 
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-
-
         String result = "";
+        String new_one = "#" + one;
+        String new_two = "#" + two;
+
+        int rows = new_two.length();
+        int cols = new_one.length();
+
+        int[][] lev_matrix = new int[rows][cols];
+        lev_matrix[0][0] = 0;
+
+        for (int i = 1; i < rows; i++)
+            lev_matrix[i][0] = lev_matrix[i - 1][0] + 1;
+        for (int j = 1; j < cols; j++)
+            lev_matrix[0][j] = lev_matrix[0][j - 1] + 1;
+
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (new_one.charAt(j) == new_two.charAt(i)) {
+                    lev_matrix[i][j] = lev_matrix[i - 1][j - 1];
+                } else {
+                    int prev_col = lev_matrix[i][j - 1];
+                    int prev_diag = lev_matrix[i - 1][j - 1];
+                    int prev_row = lev_matrix[i - 1][j];
+                    int min = Math.min(prev_col, Math.min(prev_diag,prev_row));
+                    lev_matrix[i][j] = 1 + min;
+                }
+            }
+        }
+
+        int i = rows - 1;
+        int j = cols - 1;
+
+        StringBuilder str = new StringBuilder();
+
+        while (i > 0 || j > 0) {
+            if (i == 0) {
+                str.insert(0,"-" + new_one.charAt(j) + ",");
+                j--;
+            }
+            else if (j == 0) {
+                str.insert(0,"+" + new_two.charAt(i) + ",");
+                i--;
+            } else if (new_one.charAt(j) == new_two.charAt(i)) {
+                str.insert(0,"#" + ",");
+                i--;
+                j--;
+            } else {
+                int prev_col = lev_matrix[i][j - 1];
+                int prev_diag = lev_matrix[i - 1][j - 1];
+                int prev_row = lev_matrix[i - 1][j];
+                int min = Math.min(prev_col, Math.min(prev_diag,prev_row));
+                if (min == prev_diag) {
+                    str.insert(0,"~" + new_one.charAt(j) + ",");
+                    i--;
+                    j--;
+                } else if (min == prev_row) {
+                    str.insert(0,"+" + new_two.charAt(i) + ",");
+                    i--;
+                } else if (min == prev_col) {
+                    str.insert(0,"-" + new_one.charAt(j) + ",");
+                    j--;
+                }
+            }
+        }
+        result = str.toString();
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
